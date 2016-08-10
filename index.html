@@ -79,7 +79,7 @@
   <div class="container">
     <h1>TodoList</h1>
 
-    <form>
+    <form onSubmit="submitTodo(); return false;">
       <input type="text" id="new-todo" placeholder="What needs to be done?">
     </form>
 
@@ -101,6 +101,55 @@
   </div>
 
   <script>
+    function submitTodo() {
+      var inputField = document.getElementById("new-todo");
+      var newTodoTitle = inputField.value;
+      createTodo(newTodoTitle);
+
+      // reset the value of the input field
+      inputField.value = null;
+
+      updateCounters();
+
+      function createTodo(title) {
+        // create a list item
+        var listItem = document.createElement("li");
+        listItem.className = "todo";
+
+        // create a checkbox and add it to the list item
+        var checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = "todo-" + nextTodoId();
+        checkbox.value = "1";
+        checkbox.checked = false;
+        // assign the toggleDone function
+        checkbox.onchange = toggleDone.bind(checkbox);
+        listItem.appendChild(checkbox);
+
+        // create some whitespace to put between the checkbox and the label
+        space = document.createTextNode(" ");
+        listItem.appendChild(space);
+
+        // create a label with the title of the todo item
+        var label = document.createElement("label");
+        label.htmlFor = checkbox.id;
+        label.innerHTML = title;
+        listItem.appendChild(label);
+
+        // add the listItem tot the list with items
+        var list = document.getElementById("todolist");
+        list.appendChild(listItem);
+
+        updateCounters();
+      }
+
+      function nextTodoId() {
+        return document.getElementsByClassName("todo").length + 1;
+      }
+
+    }
+
+
     function toggleDone() {
       var checkbox = this;
 
